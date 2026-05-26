@@ -1,19 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
-/**
- * User Schema
- *
- * Fields:
- *   name       – display name
- *   email      – unique login identifier (lowercased)
- *   password   – bcrypt-hashed, excluded from query results by default
- *   avatar     – optional profile picture URL
- *   role       – "user" | "admin"  (for future role-based access)
- *   isActive   – soft-disable an account without deleting it
- *   lastLogin  – updated on every successful login
- *   createdAt / updatedAt – auto-managed by Mongoose timestamps
- */
 
 const userSchema = new mongoose.Schema(
   {
@@ -70,14 +57,10 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// ── Indexes ──────────────────────────────────────────────────────────────────
-// email already has a unique index from the schema definition above.
-// Add a text index so admins can search users by name or email.
+
 userSchema.index({ name: "text", email: "text" });
 
-// ── Hooks ────────────────────────────────────────────────────────────────────
 
-// Hash password before every save (only when it has been modified)
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(12);
@@ -85,21 +68,12 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// ── Instance methods ─────────────────────────────────────────────────────────
 
-/**
- * matchPassword — compare a plain-text password against the stored hash.
- * @param {string} plainPassword
- * @returns {Promise<boolean>}
- */
 userSchema.methods.matchPassword = async function (plainPassword) {
   return bcrypt.compare(plainPassword, this.password);
 };
 
-/**
- * toSafeObject — return a plain object without sensitive fields.
- * Useful when you need to send user data in a response.
- */
+
 userSchema.methods.toSafeObject = function () {
   const obj = this.toObject();
   delete obj.password;
