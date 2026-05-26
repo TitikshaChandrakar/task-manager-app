@@ -1,10 +1,6 @@
 const Task = require("../models/Task");
 
 
-// ==========================
-// GET ALL TASKS
-// ==========================
-
 const getTasks = async (req, res) => {
 
   try {
@@ -23,10 +19,6 @@ const getTasks = async (req, res) => {
 
 };
 
-
-// ==========================
-// ADD TASK
-// ==========================
 
 const addTask = async (req, res) => {
 
@@ -49,10 +41,6 @@ const addTask = async (req, res) => {
 
 };
 
-
-// ==========================
-// UPDATE TASK
-// ==========================
 
 const updateTask = async (req, res) => {
 
