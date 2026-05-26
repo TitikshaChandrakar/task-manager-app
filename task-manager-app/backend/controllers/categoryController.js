@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Category = require("../models/Category");
 const Task = require("../models/Task");
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
 
 const assertValidId = (id, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -15,12 +14,7 @@ const assertValidId = (id, res) => {
 const formatValidationError = (err) =>
   Object.fromEntries(Object.entries(err.errors).map(([k, v]) => [k, v.message]));
 
-// ── Controllers ──────────────────────────────────────────────────────────────
 
-/**
- * GET /api/categories
- * Returns all categories for the authenticated user.
- */
 const getCategories = async (req, res) => {
   try {
     const categories = await Category.find({ user: req.user._id }).sort({ name: 1 });
@@ -30,10 +24,7 @@ const getCategories = async (req, res) => {
   }
 };
 
-/**
- * GET /api/categories/:id
- * Returns a single category with its task count.
- */
+
 const getCategoryById = async (req, res) => {
   if (!assertValidId(req.params.id, res)) return;
 
@@ -56,10 +47,7 @@ const getCategoryById = async (req, res) => {
   }
 };
 
-/**
- * POST /api/categories
- * Body: { name, color?, icon? }
- */
+
 const createCategory = async (req, res) => {
   try {
     const { name, color, icon } = req.body;
@@ -86,10 +74,7 @@ const createCategory = async (req, res) => {
   }
 };
 
-/**
- * PUT /api/categories/:id
- * Body: { name?, color?, icon? }
- */
+
 const updateCategory = async (req, res) => {
   if (!assertValidId(req.params.id, res)) return;
 
@@ -122,10 +107,7 @@ const updateCategory = async (req, res) => {
   }
 };
 
-/**
- * DELETE /api/categories/:id
- * Deletes the category and un-assigns it from all related tasks.
- */
+
 const deleteCategory = async (req, res) => {
   if (!assertValidId(req.params.id, res)) return;
 
