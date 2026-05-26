@@ -1,17 +1,6 @@
 const mongoose = require("mongoose");
 
-/**
- * Category Schema
- *
- * Allows users to organise tasks into named groups (e.g. "Work", "Personal").
- *
- * Fields:
- *   name      – category label, unique per user
- *   color     – hex colour string for UI display (e.g. "#6366f1")
- *   icon      – optional emoji or icon identifier
- *   user      – owner reference (each category belongs to one user)
- *   createdAt / updatedAt – auto-managed by Mongoose timestamps
- */
+
 
 const categorySchema = new mongoose.Schema(
   {
@@ -47,9 +36,6 @@ const categorySchema = new mongoose.Schema(
   }
 );
 
-// ── Indexes ──────────────────────────────────────────────────────────────────
-
-// Enforce unique category names per user (two users can both have "Work")
 categorySchema.index({ user: 1, name: 1 }, { unique: true });
 
 module.exports = mongoose.model("Category", categorySchema);
